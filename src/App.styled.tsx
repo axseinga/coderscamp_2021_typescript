@@ -7,4 +7,8 @@ export const Title = styled.h1`
     content: 'aaa';
     dsiplay: block;
   }
+
+  &:hover {
+    color: red;
+  }
 `;
