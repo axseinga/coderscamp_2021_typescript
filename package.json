@@ -28,12 +28,24 @@
     "eject": "react-scripts eject",
     "lint:tsx": "eslint src/",
     "lint:css": "stylelint src/**/*.styled.tsx",
-    "test-before-commit": "npm-run-all -p lint:*"
+    "test-before-commit": "npm-run-all -p lint:*",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
     ]
   },
   "husky": {
@@ -58,6 +70,16 @@
     ]
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^6.4.20",
+    "@storybook/addon-essentials": "^6.4.20",
+    "@storybook/addon-interactions": "^6.4.20",
+    "@storybook/addon-links": "^6.4.20",
+    "@storybook/builder-webpack5": "^6.4.20",
+    "@storybook/manager-webpack5": "^6.4.20",
+    "@storybook/node-logger": "^6.4.20",
+    "@storybook/preset-create-react-app": "^4.1.0",
+    "@storybook/react": "^6.4.20",
+    "@storybook/testing-library": "^0.0.9",
     "@types/jest": "^27.4.1",
     "@types/styled-components": "^5.1.24",
     "@types/uuid": "^8.3.4",
@@ -71,6 +93,7 @@
     "stylelint": "^14.6.1",
     "stylelint-config-recommended": "^7.0.0",
     "stylelint-config-styled-components": "^0.1.1",
-    "stylelint-processor-styled-components": "^1.10.0"
+    "stylelint-processor-styled-components": "^1.10.0",
+    "webpack": "^5.71.0"
   }
 }
