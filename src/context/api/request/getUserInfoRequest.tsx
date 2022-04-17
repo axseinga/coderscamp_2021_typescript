@@ -1,4 +1,4 @@
-import { axiosClient } from '../../../../utils/axios-utils';
+import { axiosClient } from '../../../utils/axios-utils';
 
 const getUserInfoRequest = () => axiosClient.get('/user/userInfo');
 

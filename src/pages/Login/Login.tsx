@@ -8,12 +8,7 @@ type LoginData = {
 };
 
 export const Login = () => {
-  const { mutate: postData, data, error, isLoading } = useLoginQuery();
-
-  if (data) {
-    localStorage.setItem('accessToken', JSON.stringify(data.accessToken));
-    localStorage.setItem('refresfToken', JSON.stringify(data.refreshToken));
-  }
+  const { mutate: postData, error, isLoading } = useLoginQuery();
 
   const {
     register,
@@ -21,8 +16,8 @@ export const Login = () => {
     formState: { errors },
   } = useForm<LoginData>();
 
-  const onSubmit = handleSubmit((data) => {
-    postData(data);
+  const onSubmit = handleSubmit((formData) => {
+    postData(formData);
   });
 
   if (isLoading) {
