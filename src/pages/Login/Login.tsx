@@ -1,6 +1,7 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { useLoginQuery } from './api/useLoginQuery';
+import { TextField, Button, Box, Grid, Typography } from '@mui/material';
 
 type LoginData = {
   email: string;
@@ -10,11 +11,9 @@ type LoginData = {
 export const Login = () => {
   const { mutate: postData, error, isLoading } = useLoginQuery();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginData>();
+  const { handleSubmit, control } = useForm<LoginData>({
+    defaultValues: {},
+  });
 
   const onSubmit = handleSubmit((formData) => {
     postData(formData);
@@ -25,34 +24,64 @@ export const Login = () => {
   }
 
   return (
-    <>
-      {error && error.response.data}
-      <form onSubmit={onSubmit}>
-        <label>Email</label>
-        <input
-          {...register('email', {
-            required: 'Email is a required',
-            minLength: {
-              value: 4,
-              message: 'Min length is 4',
-            },
-          })}
-        />
-        {errors.email && <p>{errors.email.message}</p>}
+    <Box
+      sx={{ border: '1px solid grey', width: 500, mx: 'auto', my: 10, p: 5 }}
+    >
+      <Grid
+        container
+        spacing={2}
+        direction="column"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Grid item xs={12}>
+          <Typography variant="h6" align="center">
+            Log in
+          </Typography>
+        </Grid>
 
-        <label>password</label>
-        <input
-          {...register('password', {
-            required: 'Password is a required',
-            minLength: {
-              value: 4,
-              message: 'Min length is 4',
-            },
-          })}
-        />
-        {errors.password && <p>{errors.password.message}</p>}
-        <button type="submit">Submit</button>
-      </form>
-    </>
+        <Typography variant="inherit" color="textSecondary">
+          {error && error.response.data}
+        </Typography>
+        <form onSubmit={onSubmit}>
+          <Grid item xs={12}>
+            <Controller
+              control={control}
+              name="email"
+              render={({ field, fieldState: { error } }) => (
+                <TextField
+                  {...field}
+                  label="Email"
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  margin="dense"
+                />
+              )}
+              rules={{ required: 'Email address is required' }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Controller
+              control={control}
+              name="password"
+              render={({ field, fieldState: { error } }) => (
+                <TextField
+                  {...field}
+                  label="Password"
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  margin="dense"
+                />
+              )}
+              rules={{ required: 'Password is required' }}
+            />
+          </Grid>
+
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </form>
+      </Grid>
+    </Box>
   );
 };

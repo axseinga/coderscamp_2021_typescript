@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import ScopedCssBaseline from '@mui/material/ScopedCssBaseline';
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export const Home = () => {
     navigate('/register');
   };
   return (
-    <>
+    <ScopedCssBaseline>
       <h2>Home</h2>
       <button onClick={handleRegisterClick}>Register</button>
       <button onClick={handleLoginClick}>Login</button>
@@ -24,6 +25,6 @@ export const Home = () => {
           <Link to="/AdminDashboard">Admin Dashboard</Link>
         </li>
       </ul>
-    </>
+    </ScopedCssBaseline>
   );
 };

@@ -3,7 +3,8 @@ import { getUserInfoRequest } from './request/getUserInfoRequest';
 
 const useUserInfoQuery = () => {
   const user = useQuery('user', () => getUserInfoRequest(), {
-    retry: 1,
+    staleTime: Infinity,
+    retry: 0,
   });
   return { user };
 };

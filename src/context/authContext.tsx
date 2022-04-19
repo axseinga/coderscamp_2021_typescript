@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useUserInfoQuery } from './api/useUserInfoQuery';
 import { useNavigate } from 'react-router-dom';
-import { QueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 
 type AuthContextType = {
   isUser: () => boolean;
@@ -18,11 +18,13 @@ const AuthContext = createContext({} as AuthContextType);
 
 const AuthProvider = ({ children }: Props) => {
   const { user } = useUserInfoQuery();
-
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  const accessToken = localStorage.getItem('accessToken');
+
   const isAuth = () => {
-    return user.data?.data !== undefined && user.isSuccess;
+    return user.data?.data !== undefined && accessToken !== null;
   };
 
   const isUser = () => {
@@ -36,8 +38,8 @@ const AuthProvider = ({ children }: Props) => {
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    const queryCache = new QueryCache();
-    queryCache.clear();
+    queryClient.clear;
+
     navigate('/');
   };
   return (

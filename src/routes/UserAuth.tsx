@@ -3,10 +3,10 @@ import { useAuth } from '../context/authContext';
 import { useLocation, Navigate } from 'react-router-dom';
 
 export const UserAuth = ({ children }: { children: JSX.Element }) => {
-  const { isUser, isAuth } = useAuth();
+  const { isUser } = useAuth();
   const location = useLocation();
 
-  if (!isAuth() && !isUser()) {
+  if (!isUser()) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

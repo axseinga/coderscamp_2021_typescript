@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { loginRequest } from './request/loginRequest';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../../context/authContext';
 
 type LoginData = {
   email: string;
@@ -14,6 +15,7 @@ type LocationProps = {
 };
 
 const useLoginQuery = () => {
+  const { isUser, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation() as unknown as LocationProps;
 
@@ -23,9 +25,10 @@ const useLoginQuery = () => {
 
   return useMutation((formData: LoginData) => loginRequest(formData), {
     onError: (error: any) => {
-      console.log(error.response.data);
+      throw new error.response.data();
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries('user');
       localStorage.setItem(
         'accessToken',
         JSON.stringify(data.data?.accessToken)
@@ -34,10 +37,13 @@ const useLoginQuery = () => {
         'refreshToken',
         JSON.stringify(data.data?.refreshToken)
       );
-      queryClient.invalidateQueries('user');
-
+      {
+        isUser() && navigate('/UserDashboard');
+      }
+      {
+        isAdmin() && navigate('/AdminDashboard');
+      }
       navigate(from, { replace: true });
-      navigate('/UserDashboard', { replace: true });
     },
   });
 };
