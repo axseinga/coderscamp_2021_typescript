@@ -7,29 +7,28 @@ import { Home } from '../pages/Home';
 import { UserDashboard } from '../pages/UserDashboard';
 import { SampleComponent } from '../reactQueryTools/SampleComponent';
 import { UserAuth } from './UserAuth';
-import { AdminAuth } from './AdminAuth';
 
 export const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/SampleComponent" element={<SampleComponent />} />
+      <Route path="/sampleComponent" element={<SampleComponent />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
-        path="/UserDashboard"
+        path="/userDashboard"
         element={
-          <UserAuth>
+          <UserAuth requiredRoles={['user', 'admin']}>
             <UserDashboard />
           </UserAuth>
         }
       />
       <Route
-        path="/AdminDashboard"
+        path="/adminDashboard"
         element={
-          <AdminAuth>
+          <UserAuth requiredRoles={['admin']}>
             <AdminDashboard />
-          </AdminAuth>
+          </UserAuth>
         }
       />
     </Routes>

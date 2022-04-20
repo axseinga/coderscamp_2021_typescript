@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useLoginQuery } from './api/useLoginQuery';
 import { TextField, Button, Box, Grid, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 type LoginData = {
   email: string;
@@ -9,17 +10,17 @@ type LoginData = {
 };
 
 export const Login = () => {
-  const { mutate: postData, error, isLoading } = useLoginQuery();
+  const loginUser = useLoginQuery();
 
   const { handleSubmit, control } = useForm<LoginData>({
-    defaultValues: {},
+    defaultValues: { email: '', password: '' },
   });
 
   const onSubmit = handleSubmit((formData) => {
-    postData(formData);
+    loginUser.mutateAsync(formData);
   });
 
-  if (isLoading) {
+  if (loginUser.isLoading) {
     return <div>loading...</div>;
   }
 
@@ -41,7 +42,7 @@ export const Login = () => {
         </Grid>
 
         <Typography variant="inherit" color="textSecondary">
-          {error && error.response.data}
+          {loginUser.error && loginUser.error.response.data}
         </Typography>
         <form onSubmit={onSubmit}>
           <Grid item xs={12}>
@@ -78,9 +79,13 @@ export const Login = () => {
           </Grid>
 
           <Button type="submit" variant="contained" color="primary">
-            Submit
+            Log in
           </Button>
         </form>
+        <Typography variant="inherit" color="textSecondary">
+          Don not have an account yet?{' '}
+          <Link to="/register">Create Account</Link>
+        </Typography>
       </Grid>
     </Box>
   );

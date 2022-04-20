@@ -1,5 +1,3 @@
 import { axiosClient } from '../../../utils/axios-utils';
 
-const getUserInfoRequest = () => axiosClient.get('/user/userInfo');
-
-export { getUserInfoRequest };
+export const getUserInfoRequest = () => axiosClient.get('/user/userInfo');

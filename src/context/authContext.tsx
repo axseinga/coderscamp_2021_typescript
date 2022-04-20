@@ -4,10 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 
 type AuthContextType = {
-  isUser: () => boolean;
-  isAdmin: () => boolean;
-  isAuth: () => boolean;
+  isAuthorized: () => boolean;
   logout: () => void;
+  hasSomeOfRole: (requiredRoles: string[]) => boolean;
 };
 
 type Props = {
@@ -17,33 +16,36 @@ type Props = {
 const AuthContext = createContext({} as AuthContextType);
 
 const AuthProvider = ({ children }: Props) => {
-  const { user } = useUserInfoQuery();
+  const { userInfo } = useUserInfoQuery();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem('accessToken');
 
-  const isAuth = () => {
-    return user.data?.data !== undefined && accessToken !== null;
+  const isAuthorized = () => {
+    return accessToken !== null;
   };
 
-  const isUser = () => {
-    return user.data?.data.role === 'user';
-  };
-
-  const isAdmin = () => {
-    return user.data?.data.role === 'admin';
+  const hasSomeOfRole = (requiredRoles: string[]) => {
+    return requiredRoles.includes(userInfo.data?.data.role);
   };
 
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    queryClient.clear;
+    queryClient.invalidateQueries('userInfo');
 
     navigate('/');
   };
+
   return (
-    <AuthContext.Provider value={{ isUser, isAdmin, isAuth, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthorized,
+        logout,
+        hasSomeOfRole: (requiredRoles) => hasSomeOfRole(requiredRoles),
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

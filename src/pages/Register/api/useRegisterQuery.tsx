@@ -1,5 +1,5 @@
 import { useMutation } from 'react-query';
-import { registerRequest } from './request/registerRequest';
+import { registerUserRequest } from './request/registerUserRequest';
 import { useNavigate } from 'react-router-dom';
 
 type FormData = {
@@ -11,16 +11,18 @@ type FormData = {
   repeat_password: string;
 };
 
-const useRegisterQuery = () => {
+export const useRegisterQuery = () => {
   const navigate = useNavigate();
-  return useMutation((data: FormData) => registerRequest(data), {
-    onError: (error: any) => {
-      console.log(error.response.data);
-    },
-    onSuccess: () => {
-      navigate('/login');
-    },
-  });
+  const registerUser = useMutation(
+    (data: FormData) => registerUserRequest(data),
+    {
+      onError: (error: any) => {
+        console.log(error.response.data);
+      },
+      onSuccess: () => {
+        navigate('/login');
+      },
+    }
+  );
+  return registerUser;
 };
-
-export { useRegisterQuery };

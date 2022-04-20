@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useRegisterQuery } from './api/useRegisterQuery';
 import { TextField, Button, Box, Grid, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 type FormData = {
   username: string;
@@ -13,17 +14,24 @@ type FormData = {
 };
 
 export const Register = () => {
-  const { mutate: postData, error, isLoading } = useRegisterQuery();
+  const registerUser = useRegisterQuery();
 
   const { control, handleSubmit } = useForm<FormData>({
-    defaultValues: {},
+    defaultValues: {
+      username: '',
+      name: '',
+      surname: '',
+      email: '',
+      password: '',
+      repeat_password: '',
+    },
   });
 
-  const onSubmit = handleSubmit((data) => {
-    postData(data);
+  const onSubmit = handleSubmit((data: FormData) => {
+    registerUser.mutateAsync(data);
   });
 
-  if (isLoading) {
+  if (registerUser.isLoading) {
     return <div>loading...</div>;
   }
 
@@ -33,7 +41,7 @@ export const Register = () => {
         border: '1px solid grey',
         width: 500,
         mx: 'auto',
-        my: 10,
+        my: '5%',
       }}
     >
       <Grid
@@ -45,12 +53,12 @@ export const Register = () => {
       >
         <Grid item xs={12}>
           <Typography variant="h6" align="center">
-            Sign up
+            Create Account
           </Typography>
         </Grid>
 
         <Typography variant="inherit" color="textSecondary">
-          {error && error.response.data}
+          {registerUser.error && registerUser.error.response.data}
         </Typography>
 
         <form onSubmit={onSubmit}>
@@ -189,9 +197,12 @@ export const Register = () => {
           </Grid>
 
           <Button type="submit" variant="contained" color="primary">
-            Submit
+            Register Account
           </Button>
         </form>
+        <Typography variant="inherit" color="textSecondary">
+          Already have an account? <Link to="/login">Sign in</Link>
+        </Typography>
       </Grid>
     </Box>
   );

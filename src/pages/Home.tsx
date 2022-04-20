@@ -1,28 +1,28 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import ScopedCssBaseline from '@mui/material/ScopedCssBaseline';
+import { Button } from '@mui/material';
 
 export const Home = () => {
   const navigate = useNavigate();
 
-  const handleLoginClick = () => {
+  const handleLogin = () => {
     navigate('/login');
   };
 
-  const handleRegisterClick = () => {
+  const handleRegister = () => {
     navigate('/register');
   };
   return (
     <ScopedCssBaseline>
-      <h2>Home</h2>
-      <button onClick={handleRegisterClick}>Register</button>
-      <button onClick={handleLoginClick}>Login</button>
+      <Button onClick={handleRegister}>Register</Button>
+      <Button onClick={handleLogin}>Login</Button>
       <ul>
         <li>
-          <Link to="/UserDashboard">User Dashboard</Link>
+          <Link to="/userDashboard">User Dashboard</Link>
         </li>
         <li>
-          <Link to="/AdminDashboard">Admin Dashboard</Link>
+          <Link to="/adminDashboard">Admin Dashboard</Link>
         </li>
       </ul>
     </ScopedCssBaseline>

@@ -9,7 +9,5 @@ type FormData = {
   repeat_password: string;
 };
 
-const registerRequest = (data: FormData) =>
+export const registerUserRequest = (data: FormData) =>
   axiosClient.post('/user/register', data);
-
-export { registerRequest };

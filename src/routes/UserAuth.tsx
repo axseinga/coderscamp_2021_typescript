@@ -2,11 +2,20 @@ import React from 'react';
 import { useAuth } from '../context/authContext';
 import { useLocation, Navigate } from 'react-router-dom';
 
-export const UserAuth = ({ children }: { children: JSX.Element }) => {
-  const { isUser } = useAuth();
+type Props = {
+  requiredRoles: string[];
+  children: JSX.Element;
+};
+
+export const UserAuth = ({ requiredRoles, children }: Props) => {
+  const { isAuthorized, hasSomeOfRole } = useAuth();
   const location = useLocation();
 
-  if (!isUser()) {
+  if (!isAuthorized()) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (!hasSomeOfRole(requiredRoles)) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
