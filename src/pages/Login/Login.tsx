@@ -1,8 +1,16 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useLoginQuery } from './api/useLoginQuery';
-import { TextField, Button, Box, Grid, Typography, Alert } from '@mui/material';
-import { Link } from 'react-router-dom';
+import {
+  TextField,
+  Button,
+  Box,
+  Grid,
+  Typography,
+  Alert,
+  Link,
+} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 type LoginData = {
   email: string;
@@ -11,7 +19,6 @@ type LoginData = {
 
 export const Login = () => {
   const loginUser = useLoginQuery();
-  console.log(loginUser.error);
 
   const { handleSubmit, control } = useForm<LoginData>({
     defaultValues: { email: '', password: '' },
@@ -26,9 +33,7 @@ export const Login = () => {
   }
 
   return (
-    <Box
-      sx={{ border: '1px solid grey', width: 500, mx: 'auto', my: 10, p: 5 }}
-    >
+    <Box sx={{ mx: 'auto', my: 10, p: 5 }}>
       <Grid
         container
         spacing={2}
@@ -37,12 +42,11 @@ export const Login = () => {
         justifyContent="space-between"
       >
         <Grid item xs={12}>
-          <Typography variant="h6" align="center">
+          <Typography variant="h6" align="center" color="textSecondary">
             Log in
           </Typography>
         </Grid>
 
-        <Typography variant="inherit" color="textSecondary"></Typography>
         {loginUser.error && (
           <Alert severity="error">{loginUser.error.response.data}</Alert>
         )}
@@ -64,7 +68,7 @@ export const Login = () => {
               rules={{ required: 'Email address is required' }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} mb="2%">
             <Controller
               control={control}
               name="password"
@@ -85,9 +89,11 @@ export const Login = () => {
             Log in
           </Button>
         </form>
-        <Typography variant="inherit" color="textSecondary">
+        <Typography variant="inherit" color="textSecondary" my="2%">
           Don not have an account yet?{' '}
-          <Link to="/register">Create Account</Link>
+          <Link component={RouterLink} to="/register" underline="none">
+            Create Account
+          </Link>
         </Typography>
       </Grid>
     </Box>

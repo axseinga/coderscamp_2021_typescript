@@ -1,8 +1,16 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useRegisterQuery } from './api/useRegisterQuery';
-import { TextField, Button, Box, Grid, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import {
+  TextField,
+  Button,
+  Box,
+  Grid,
+  Typography,
+  Link,
+  Alert,
+} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 type FormData = {
   username: string;
@@ -16,7 +24,7 @@ type FormData = {
 export const Register = () => {
   const registerUser = useRegisterQuery();
 
-  const { control, handleSubmit } = useForm<FormData>({
+  const { control, handleSubmit, getValues } = useForm<FormData>({
     defaultValues: {
       username: '',
       name: '',
@@ -38,28 +46,29 @@ export const Register = () => {
   return (
     <Box
       sx={{
-        border: '1px solid grey',
-        width: 500,
-        mx: 'auto',
         my: '5%',
+        mx: 'auto',
+        flexGrow: 1,
+        align: 'center',
       }}
     >
       <Grid
         container
-        spacing={2}
+        spacing={3}
         direction="column"
+        justifyContent="space-around"
         alignItems="center"
-        justifyContent="space-between"
+        width="100%"
       >
         <Grid item xs={12}>
-          <Typography variant="h6" align="center">
+          <Typography variant="h6" align="center" color="textSecondary">
             Create Account
           </Typography>
         </Grid>
 
-        <Typography variant="inherit" color="textSecondary">
-          {registerUser.error && registerUser.error.response.data}
-        </Typography>
+        {registerUser.error && (
+          <Alert severity="error">{registerUser.error.response.data}</Alert>
+        )}
 
         <form onSubmit={onSubmit}>
           <Grid item xs={12}>
@@ -79,13 +88,17 @@ export const Register = () => {
                 required: 'Username is required',
                 minLength: {
                   value: 4,
-                  message: 'Min length is 4',
+                  message: 'Username must have at least 4 characters',
+                },
+                maxLength: {
+                  value: 10,
+                  message: 'Max length is 10',
                 },
               }}
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item md={12}>
             <Controller
               control={control}
               name="name"
@@ -102,7 +115,11 @@ export const Register = () => {
                 required: 'Name is required',
                 minLength: {
                   value: 4,
-                  message: 'Min length is 4',
+                  message: 'Name must have at least 4 characters',
+                },
+                maxLength: {
+                  value: 10,
+                  message: 'Max length is 10',
                 },
               }}
             />
@@ -125,7 +142,11 @@ export const Register = () => {
                 required: 'Surname is required',
                 minLength: {
                   value: 4,
-                  message: 'Min length is 4',
+                  message: 'Surname must have at least 4 characters',
+                },
+                maxLength: {
+                  value: 10,
+                  message: 'Max length is 10',
                 },
               }}
             />
@@ -166,14 +187,14 @@ export const Register = () => {
               rules={{
                 required: 'Password is required',
                 minLength: {
-                  value: 4,
-                  message: 'Min length is 4',
+                  value: 8,
+                  message: 'Password must have at least 8 characters',
                 },
               }}
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} mb="5%">
             <Controller
               control={control}
               name="repeat_password"
@@ -188,20 +209,31 @@ export const Register = () => {
               )}
               rules={{
                 required: 'Password is required',
-                minLength: {
-                  value: 4,
-                  message: 'Min length is 4',
+                validate: {
+                  matchesPreviousPassword: (value) => {
+                    const { password } = getValues();
+                    return password === value || 'Passwords should match!';
+                  },
                 },
               }}
             />
           </Grid>
-
-          <Button type="submit" variant="contained" color="primary">
-            Register Account
-          </Button>
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained" color="primary">
+              Register Account
+            </Button>
+          </Grid>
         </form>
-        <Typography variant="inherit" color="textSecondary">
-          Already have an account? <Link to="/login">Sign in</Link>
+        <Typography
+          variant="inherit"
+          color="textSecondary"
+          align="center"
+          my="2%"
+        >
+          Already have an account?{' '}
+          <Link component={RouterLink} to="/login" underline="none">
+            Sign in
+          </Link>
         </Typography>
       </Grid>
     </Box>
