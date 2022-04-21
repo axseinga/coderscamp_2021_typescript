@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useLoginQuery } from './api/useLoginQuery';
-import { TextField, Button, Box, Grid, Typography } from '@mui/material';
+import { TextField, Button, Box, Grid, Typography, Alert } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 type LoginData = {
@@ -11,6 +11,7 @@ type LoginData = {
 
 export const Login = () => {
   const loginUser = useLoginQuery();
+  console.log(loginUser.error);
 
   const { handleSubmit, control } = useForm<LoginData>({
     defaultValues: { email: '', password: '' },
@@ -41,9 +42,11 @@ export const Login = () => {
           </Typography>
         </Grid>
 
-        <Typography variant="inherit" color="textSecondary">
-          {loginUser.error && loginUser.error.response.data}
-        </Typography>
+        <Typography variant="inherit" color="textSecondary"></Typography>
+        {loginUser.error && (
+          <Alert severity="error">{loginUser.error.response.data}</Alert>
+        )}
+
         <form onSubmit={onSubmit}>
           <Grid item xs={12}>
             <Controller
