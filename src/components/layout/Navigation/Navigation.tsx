@@ -7,12 +7,8 @@ export const Navigation = () => {
     <nav>
       <div>Logo</div>
       <ul>
-        <Link
-          to={'/'}
-        >
-          Home
-        </Link>
-        <SearchBar/>
+        <Link to={'/'}>Home</Link>
+        <SearchBar />
       </ul>
     </nav>
   );
