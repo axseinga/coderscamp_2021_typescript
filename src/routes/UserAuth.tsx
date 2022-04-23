@@ -11,11 +11,7 @@ export const UserAuth = ({ requiredRoles, children }: Props) => {
   const { isAuthorized, hasSomeOfRole } = useAuth();
   const location = useLocation();
 
-  if (!isAuthorized()) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  if (!hasSomeOfRole(requiredRoles)) {
+  if (!isAuthorized() || !hasSomeOfRole(requiredRoles)) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
