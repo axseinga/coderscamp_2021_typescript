@@ -5,7 +5,5 @@ type LoginData = {
   password: string;
 };
 
-const loginRequest = (formData: LoginData) =>
+export const loginRequest = (formData: LoginData) =>
   axiosClient.post('/user/login', formData);
-
-export { loginRequest };
